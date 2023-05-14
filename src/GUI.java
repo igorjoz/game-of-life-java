@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 
 public class GUI {
+    Game game;
 
     private JFrame frame;
     private JPanel mainPanel;
@@ -16,6 +17,8 @@ public class GUI {
     private int fontSize = 20;
     private Font font = new Font(fontName, Font.PLAIN, fontSize);
 
+    private int mapSize = 0;
+
     public GUI() {
         frame = new JFrame("Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -24,20 +27,20 @@ public class GUI {
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setSize(new Dimension(frame.getWidth(), frame.getHeight()));
 
-        JPanel buttonPanel = new JPanel(new GridLayout(1,1)); // Add this line
+        JPanel buttonPanel = new JPanel(new GridLayout(1,1));
 
         inputField = new JTextField(5);
         inputField.setFont(font);
         inputField.setHorizontalAlignment(JTextField.CENTER);
-        inputField.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding
+        inputField.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         startButton = new JButton("Start Game");
 
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int size = Integer.parseInt(inputField.getText());
-                startGame(size);
+                mapSize = Integer.parseInt(inputField.getText());
+                startGame(mapSize);
             }
         });
 
@@ -55,6 +58,8 @@ public class GUI {
     }
 
     private void startGame(int size) {
+        game.initializeGame(size);
+
         frame.getContentPane().removeAll();
 
         JPanel gamePanel = new JPanel(new GridLayout(size, size));
@@ -65,7 +70,6 @@ public class GUI {
             label.setHorizontalAlignment(JLabel.CENTER);
             label.setVerticalAlignment(JLabel.CENTER);
 
-            // icon
             ImageIcon icon = resizeIcon(new ImageIcon("wolf.png"), 50, 50);
 
             Random rand = new Random();
@@ -94,5 +98,13 @@ public class GUI {
         Image img = icon.getImage();
         Image resizedImage = img.getScaledInstance(resizedWidth, resizedHeight,  java.awt.Image.SCALE_SMOOTH);
         return new ImageIcon(resizedImage);
+    }
+
+    public int getMapSize() {
+        return mapSize;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

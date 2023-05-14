@@ -2,9 +2,12 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GUI());
+        //SwingUtilities.invokeLater(() -> {
+            GUI gui = new GUI();
+        //});
 
-        // create a new game
-        //Game game = new Game();
+        Game game = new Game(gui);
+
+        gui.setGame(game);
     }
 }
