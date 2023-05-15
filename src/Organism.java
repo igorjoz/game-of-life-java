@@ -30,6 +30,14 @@ public abstract class Organism {
         this.species = Species.ORGANISM;
     }
 
+    public Organism(int strength, int initiative, World world) {
+        this(strength, initiative, 0, 'N', new Point(0, 0), world);
+    }
+
+    public Organism(int strength, int initiative, char symbol, World world) {
+        this(strength, initiative, 0, symbol, new Point(0, 0), world);
+    }
+
     public abstract void action();
     public abstract boolean collision(Organism other);
     public abstract void reproduce(Point position);

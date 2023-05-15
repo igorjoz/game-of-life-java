@@ -15,7 +15,7 @@ public class World {
 
     private boolean isPlayerAlive;
 
-    private int size;
+    private static int size;
 
     public World(int size) {
         this.isPlayerAlive = true;
@@ -24,12 +24,12 @@ public class World {
         this.organisms = new Organism[size][size];
     }
 
-    public void drawWorld() {
-        // Implement your drawing logic here. Use System.out.println() for console output.
+    public static int getSize() {
+        return size;
     }
 
-    public void drawHorizontalBorder() {
-        // Implement your drawing logic here.
+    public void drawWorld() {
+        // Implement your drawing logic here. Use System.out.println() for console output.
     }
 
     public void takeTurn() {
@@ -40,15 +40,18 @@ public class World {
     }
 
     public void spawnOrganism(Organism organism) {
-        // Implement spawn logic here.
+        organismsList.add(organism);
+        organisms[organism.getPosition().x][organism.getPosition().y] = organism;
     }
 
     public void setOrganism(Organism organism, Point position) {
         // Implement set organism logic here.
     }
 
-    public void createHuman(Organism organism, Point position) {
-        // Implement create human logic here.
+    public void createHuman(Human human, Point position) {
+        playerPosition = position;
+        organismsList.add(human);
+        organisms[position.x][position.y] = human;
     }
 
     public void move(Point position, Point destination) {
@@ -125,6 +128,74 @@ public class World {
 
     public boolean getIsPlayerAlive() {
         return isPlayerAlive;
+    }
+
+    public Organism getOrganismAt(Point destination) {
+        return organisms[destination.x][destination.y];
+    }
+
+    public boolean hasFreeSpace(Point position) {
+        if (isWithinBoardBoundaries(position.x - 1, position.y, size) && organisms[position.x - 1][position.y] == null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public Point getRandomNeighbour(Point position) {
+        int x = position.x;
+        int y = position.y;
+
+        int random = (int) (Math.random() * 4);
+
+        switch (random) {
+            case 0:
+                x--;
+                break;
+            case 1:
+                x++;
+                break;
+            case 2:
+                y--;
+                break;
+            case 3:
+                y++;
+                break;
+        }
+
+        return new Point(x, y);
+    }
+
+    public void setIsPlayerAlive(boolean isPlayerAlive) {
+        this.isPlayerAlive = isPlayerAlive;
+    }
+
+    public void setPlayerPosition(int x, int y) {
+        playerPosition = new Point(x, y);
+    }
+
+    public Point getRandomFreeSpaceAround(Point position) {
+        int x = position.x;
+        int y = position.y;
+
+        int random = (int) (Math.random() * 4);
+
+        switch (random) {
+            case 0:
+                x--;
+                break;
+            case 1:
+                x++;
+                break;
+            case 2:
+                y--;
+                break;
+            case 3:
+                y++;
+                break;
+        }
+
+        return new Point(x, y);
     }
 }
 

@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.Scanner;
 import java.io.*;
 
@@ -6,7 +7,7 @@ public class Game {
     private int size;
 
 
-    private World world;
+    public World world;
 
     private char playerInput;
     private int turn;
@@ -19,16 +20,6 @@ public class Game {
 
     public Game() {
     }
-
-    /*public Game(int size) {
-        this.world = new World(size);
-        this.playerInput = ' ';
-        this.isRunning = true;
-        this.turn = 0;
-        this.specialAbilityCooldown = -1;
-        this.isSpecialAbilityActive = false;
-        this.size = size;
-    }*/
 
     public Game(GUI gui) {
         this.gui = gui;
@@ -49,13 +40,27 @@ public class Game {
         this.isSpecialAbilityActive = false;
         this.size = size;
 
-        // create 2D array of size x size
-        // fill array with random numbers
+        spawnInitialOrganisms();
+    }
 
-        /*for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+    public void spawnInitialOrganisms() {
+        createHuman();
+        spawnWolves();
+    }
 
-            }
-        }*/
+    public void createHuman() {
+        Human human = new Human(new Point(0, 0), world);
+        world.createHuman(human, new Point(0, 0));
+    }
+
+    public void spawnWolves() {
+        for (int i = 0; i < 2; i++) {
+            Wolf wolf = new Wolf(new Point(1 + i, i), world);
+            world.spawnOrganism(wolf);
+        }
+    }
+
+    public Object getWorld() {
+        return world;
     }
 }

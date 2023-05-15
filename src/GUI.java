@@ -64,34 +64,52 @@ public class GUI {
 
         JPanel gamePanel = new JPanel(new GridLayout(size, size));
 
-        for (int i = 0; i < size * size; i++) {
-            JLabel label = new JLabel();
-            label.setPreferredSize(new Dimension(50, 50));
-            label.setHorizontalAlignment(JLabel.CENTER);
-            label.setVerticalAlignment(JLabel.CENTER);
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                JLabel label = new JLabel();
+                label.setPreferredSize(new Dimension(50, 50));
+                label.setHorizontalAlignment(JLabel.CENTER);
+                label.setVerticalAlignment(JLabel.CENTER);
 
-            ImageIcon icon = resizeIcon(new ImageIcon("wolf.png"), 50, 50);
+                // human icon
+                ImageIcon humanIcon = resizeIcon(new ImageIcon("human.png"), 50, 50);
+                ImageIcon wolfIcon = resizeIcon(new ImageIcon("wolf.png"), 50, 50);
+//            ImageIcon sheepIcon = resizeIcon(new ImageIcon("sheep.png"), 50, 50);
 
-            Random rand = new Random();
-            int randomNum = rand.nextInt(3);
-            if (randomNum == 0) {
-                //label.setIcon(resizeIcon(new ImageIcon("wolf.png"), 50, 50));
-                label.setIcon(icon);
-            } else if (randomNum == 1) {
-                //label.setIcon(resizeIcon(new ImageIcon("wolf.png"), 50, 50));
-                label.setIcon(icon);
-            } else {
-                //label.setIcon(resizeIcon(new ImageIcon("wolf.png"), 50, 50));
-                label.setIcon(icon);
+                // if is Human
+                Organism organism = game.world.getOrganismAt(new Point(i, j));
+
+                if (organism instanceof Human) {
+                    label.setIcon(humanIcon);
+                } else if (organism instanceof Wolf) {
+                    label.setIcon(wolfIcon);
+                } else {
+                    //label.setIcon(humanIcon);
+                }
+
+//            Random rand = new Random();
+//            int randomNum = rand.nextInt(3);
+//            if (randomNum == 0) {
+//                //label.setIcon(resizeIcon(new ImageIcon("wolf.png"), 50, 50));
+//                label.setIcon(icon);
+//            } else if (randomNum == 1) {
+//                //label.setIcon(resizeIcon(new ImageIcon("wolf.png"), 50, 50));
+//                label.setIcon(icon);
+//            } else {
+//                //label.setIcon(resizeIcon(new ImageIcon("wolf.png"), 50, 50));
+//                label.setIcon(icon);
+//            }
+
+                gamePanel.add(label);
             }
-
-            gamePanel.add(label);
         }
 
         frame.add(gamePanel);
         frame.pack();
         frame.revalidate();
         frame.repaint();
+
+        //game.runGame(size);
     }
 
     private ImageIcon resizeIcon(ImageIcon icon, int resizedWidth, int resizedHeight) {
