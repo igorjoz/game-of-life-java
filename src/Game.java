@@ -1,4 +1,9 @@
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class Game {
     private GUI gui;
@@ -98,6 +103,80 @@ public class Game {
 
         specialAbilityDuration = 5;
         specialAbilityCooldown = 0;
+    }
+
+    public void saveToFile() {
+        try {
+            PrintWriter file = new PrintWriter(new FileOutputStream("save.txt"));
+
+            file.println(turn);
+            file.println(size + " " + world.getOrganismsList().size());
+            file.println(specialAbilityCooldown + " " + specialAbilityDuration);
+            file.println(world.getPlayerPosition().x + " " + world.getPlayerPosition().y);
+
+            for (Organism organism : world.getOrganismsList()) {
+                file.println(organism.getPosition().x + " " + organism.getPosition().y + " "
+                        + organism.getStrength() + " " + organism.getAge() + " " + organism.getSpecies());
+            }
+
+            file.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadFromFile() {
+        try {
+            Scanner file = new Scanner(new File("save.txt"));
+
+            world.clearOrganisms();
+
+            int organismsQuantity;
+            int playerX, playerY;
+
+            int x, y;
+            int strength, age;
+
+            turn = file.nextInt();
+            size = file.nextInt();
+            organismsQuantity = file.nextInt();
+
+            specialAbilityCooldown = file.nextInt();
+            specialAbilityDuration = file.nextInt();
+
+            playerX = file.nextInt();
+            playerY = file.nextInt();
+
+            world.getHuman().setPosition(new Point(playerX, playerY));
+
+            for (int i = 0; i < organismsQuantity; i++) {
+                x = file.nextInt();
+                y = file.nextInt();
+                strength = file.nextInt();
+                age = file.nextInt();
+
+                String speciesString = file.next();
+                Species species = Species.valueOf(speciesString);
+
+                Organism organism = null;
+
+                if (species == Species.HUMAN) {
+                    organism = new Human(new Point(x, y), world);
+                    world.setHuman((Human) organism);
+                } else if (species == Species.WOLF) {
+                    organism = new Wolf(new Point(x, y), world);
+                } // Follow the same pattern for the rest of the species
+
+                organism.setStrength(strength);
+                organism.setAge(age);
+
+                world.setOrganism(organism, new Point(x, y));
+            }
+
+            file.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: could not open file");
+        }
     }
 
     public void quitGame() {

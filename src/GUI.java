@@ -136,10 +136,10 @@ public class GUI {
                     game.activateSpecialAbility();
                 }  else if (key == KeyEvent.VK_S) {
                     System.out.println("Save game state");
-                    //game.saveGameToFile();
+                    game.saveToFile();
                 } else if (key == KeyEvent.VK_L) {
                     System.out.println("Load game state");
-                    //game.loadGameFromFile();
+                    game.loadFromFile();
                 }  else if (key == KeyEvent.VK_ESCAPE || key == KeyEvent.VK_Q) {
                     System.out.println("Escape OR 'q' key pressed");
                     game.quitGame();
@@ -173,9 +173,10 @@ public class GUI {
                     label.setIcon(humanIcon);
                 } else if (organism instanceof Wolf) {
                     label.setIcon(wolfIcon);
-                } else if (organism instanceof Fox) {
-                    label.setIcon(foxIcon);
                 }
+                /*else if (organism instanceof Fox) {
+                    label.setIcon(foxIcon);
+                }*/
 
                 gamePanel.add(label);
             }

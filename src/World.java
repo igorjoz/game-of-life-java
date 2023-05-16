@@ -1,3 +1,4 @@
+import java.io.ByteArrayOutputStream;
 import java.util.*;
 
 import java.awt.Point;
@@ -131,7 +132,13 @@ public class World {
     }
 
     public void clearOrganisms() {
-        // Implement clearOrganisms logic here.
+        organismsList.clear();
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                organisms[i][j] = null;
+            }
+        }
     }
 
     public void printOrganismsInfo() {
@@ -239,6 +246,14 @@ public class World {
 
     public Game getGame() {
         return game;
+    }
+
+    public List<Organism> getOrganismsList() {
+        return organismsList;
+    }
+
+    public void setHuman(Human human) {
+        this.human = human;
     }
 }
 
