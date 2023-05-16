@@ -49,10 +49,6 @@ public class Animal extends Organism {
         return false;
     }
 
-    public void draw() {
-        // implement draw logic here
-    }
-
     protected void move(Point destination) {
         world.move(position, destination);
         position = destination;
@@ -77,7 +73,7 @@ public class Animal extends Organism {
     protected boolean canMoveTo(Point destination) {
         boolean canMoveTo = world.isEmpty(destination);
 
-        if (destination.getX() < 0 || destination.getX() >= World.getSize() || destination.getY() < 0 || destination.getY() >= World.getSize()) {
+        if (destination.getX() < 0 || destination.getX() >= world.getSize() || destination.getY() < 0 || destination.getY() >= world.getSize()) {
             canMoveTo = false;
         }
 

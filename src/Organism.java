@@ -1,7 +1,6 @@
 import java.awt.Point;
 
 public abstract class Organism {
-
     protected int strength;
     protected int initiative;
     protected int age;
@@ -41,7 +40,6 @@ public abstract class Organism {
     public abstract void action();
     public abstract boolean collision(Organism other);
     public abstract void reproduce(Point position);
-    public abstract void draw();
     public abstract void die();
     public abstract void kill(Organism other);
     public abstract boolean canKill(Organism other);

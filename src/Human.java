@@ -3,6 +3,7 @@ import java.awt.*;
 public class Human extends Animal {
 
     private PlayerAction playerAction;
+    private boolean isAlive;
 
     public static final int STRENGTH = 5;
     public static final int INITIATIVE = 4;
@@ -10,8 +11,10 @@ public class Human extends Animal {
 
     public Human(Point position, World world) {
         super(STRENGTH, INITIATIVE, SYMBOL, position, world);
+
         this.playerAction = PlayerAction.NONE;
         this.species = Species.HUMAN;
+        this.isAlive = true;
     }
 
     @Override
@@ -19,14 +22,29 @@ public class Human extends Animal {
         int x = position.x;
         int y = position.y;
 
-        if (playerAction == PlayerAction.MOVE_UP) {
-            y -= 1;
-        } else if (playerAction == PlayerAction.MOVE_DOWN) {
-            y += 1;
-        } else if (playerAction == PlayerAction.MOVE_LEFT) {
-            x -= 1;
-        } else if (playerAction == PlayerAction.MOVE_RIGHT) {
-            x += 1;
+        int specialAbilityDuration = world.getGame().getSpecialAbilityDuration();
+        int random = (int) (Math.random() * 2);
+
+        if (specialAbilityDuration > 2 || (specialAbilityDuration > 0 && random == 1)) {
+            if (playerAction == PlayerAction.MOVE_UP) {
+                y -= 2;
+            } else if (playerAction == PlayerAction.MOVE_DOWN) {
+                y += 2;
+            } else if (playerAction == PlayerAction.MOVE_LEFT) {
+                x -= 2;
+            } else if (playerAction == PlayerAction.MOVE_RIGHT) {
+                x += 2;
+            }
+        } else {
+            if (playerAction == PlayerAction.MOVE_UP) {
+                y--;
+            } else if (playerAction == PlayerAction.MOVE_DOWN) {
+                y++;
+            } else if (playerAction == PlayerAction.MOVE_LEFT) {
+                x--;
+            } else if (playerAction == PlayerAction.MOVE_RIGHT) {
+                x++;
+            }
         }
 
         Point destination = new Point(x, y);
@@ -42,7 +60,6 @@ public class Human extends Animal {
 
         if (canMoveTo(destination)) {
             move(destination);
-            //world.setPlayerPosition(x, y);
         }
     }
 
@@ -57,23 +74,20 @@ public class Human extends Animal {
     }
 
     @Override
-    public void draw() {
-        // implement draw logic here
-    }
-
-    @Override
     public void die() {
-        world.setIsPlayerAlive(false);
+        isAlive = false;
         super.die();
     }
 
     @Override
-    public void reproduce(Point position) {
-        // reproduction logic here
-    }
+    public void reproduce(Point position) {}
 
     public PlayerAction getPlayerAction() {
         return playerAction;
+    }
+
+    public boolean getIsAlive() {
+        return isAlive;
     }
 
     public void setPlayerAction(PlayerAction playerAction) {
