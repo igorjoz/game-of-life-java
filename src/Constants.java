@@ -5,4 +5,6 @@ public class Constants {
     public static final int ARROW_RIGHT = 77;
     public static final int ESC = 27;
     public static final int WORLD_SIZE = 20;
+
+    public static final int BOARD_TILE_SIZE = 50;
 }

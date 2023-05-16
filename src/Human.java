@@ -42,7 +42,7 @@ public class Human extends Animal {
 
         if (canMoveTo(destination)) {
             move(destination);
-            world.setPlayerPosition(x, y);
+            //world.setPlayerPosition(x, y);
         }
     }
 
