@@ -3,13 +3,17 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class GUI {
+    private static final int TILE_SIZE = 50;
     Game game;
 
     private JFrame frame;
     private JPanel mainPanel;
+    private JPanel buttonPanel;
+    private JPanel gamePanel;
     private JTextField inputField;
     private JButton startButton;
 
@@ -17,105 +21,220 @@ public class GUI {
     private int fontSize = 20;
     private Font font = new Font(fontName, Font.PLAIN, fontSize);
 
+    ImageIcon humanIcon = resizeIcon(new ImageIcon("human.png"), 50, 50);
+    ImageIcon wolfIcon = resizeIcon(new ImageIcon("wolf.png"), 50, 50);
+    //ImageIcon sheepIcon = resizeIcon(new ImageIcon("sheep.png"), 50, 50);
+
+
     private int mapSize = 0;
 
     public GUI() {
-        frame = new JFrame("Game");
+        createStartGameFrame();
+
+        createStartGameInputField();
+        createStartGameButton();
+
+        createStartGameMainPanel();
+
+        frame.setVisible(true);
+        game = new Game(this);
+    }
+
+    private void createStartGameFrame() {
+        frame = new JFrame("Game of Life");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 200);
+        frame.setLocationRelativeTo(null);
+    }
 
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setSize(new Dimension(frame.getWidth(), frame.getHeight()));
-
-        JPanel buttonPanel = new JPanel(new GridLayout(1,1));
-
+    private void createStartGameInputField() {
         inputField = new JTextField(5);
         inputField.setFont(font);
         inputField.setHorizontalAlignment(JTextField.CENTER);
         inputField.setBorder(new EmptyBorder(10, 10, 10, 10));
 
+        inputField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mapSize = Integer.parseInt(inputField.getText());
+                startGame();
+            }
+        });
+    }
+
+    private void createStartGameButton() {
+        buttonPanel = new JPanel(new GridLayout(1,1));
+
         startButton = new JButton("Start Game");
+        startButton.setSize(new Dimension(frame.getWidth(), 200));
+        startButton.setFont(font);
 
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mapSize = Integer.parseInt(inputField.getText());
-                startGame(mapSize);
+                startGame();
             }
         });
 
-        startButton.setSize(new Dimension(mainPanel.getWidth(), 200));
-        startButton.setFont(font);
         buttonPanel.add(startButton);
+    }
+
+    private void createStartGameMainPanel() {
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setSize(new Dimension(frame.getWidth(), frame.getHeight()));
 
         mainPanel.add(inputField, BorderLayout.NORTH);
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
-        mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding
+        mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         frame.add(mainPanel);
-        //frame.pack();
-        frame.setVisible(true);
     }
 
-    private void startGame(int size) {
-        game.initializeGame(size);
+    private void startGame() {
+        game.initializeGame();
 
-        frame.getContentPane().removeAll();
+        createGameFrame();
+        createKeyPressEventListener();
+        createInitialGamePanel();
+        prepareGameFrame();
 
-        JPanel gamePanel = new JPanel(new GridLayout(size, size));
+        game.runGame();
+    }
 
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+    private void createGameFrame() {
+        frame.dispose();
+
+        frame = new JFrame("Game of Life");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(mapSize * TILE_SIZE, mapSize * TILE_SIZE);
+        frame.setLocationRelativeTo(null);
+    }
+
+    private void createKeyPressEventListener() {
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int key = e.getKeyCode();
+
+                if (key == KeyEvent.VK_LEFT) {
+                    System.out.println("Left key pressed");
+                    game.movePlayer(Direction.LEFT);
+                } else if (key == KeyEvent.VK_RIGHT) {
+                    System.out.println("Right key pressed");
+                    game.movePlayer(Direction.RIGHT);
+                } else if (key == KeyEvent.VK_UP) {
+                    System.out.println("Up key pressed");
+                    game.movePlayer(Direction.UP);
+                } else if (key == KeyEvent.VK_DOWN) {
+                    System.out.println("Down key pressed");
+                    game.movePlayer(Direction.DOWN);
+                }  else if (key == KeyEvent.VK_E) {
+                    System.out.println("Special ability");
+                    //game.useSpecialAbility();
+                }  else if (key == KeyEvent.VK_S) {
+                    System.out.println("Save game state");
+                    //game.saveGameToFile();
+                } else if (key == KeyEvent.VK_L) {
+                    System.out.println("Load game state");
+                    //game.loadGameFromFile();
+                }  else if (key == KeyEvent.VK_ESCAPE || key == KeyEvent.VK_Q) {
+                    System.out.println("Escape OR 'q' key pressed");
+                    game.quitGame();
+                }
+
+                refreshFrame();
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
+
+        frame.setVisible(true);
+        frame.setFocusable(true);
+    }
+
+    private void createInitialGamePanel() {
+        gamePanel = new JPanel(new GridLayout(mapSize, mapSize));
+
+        for (int i = 0; i < mapSize; i++) {
+            for (int j = 0; j < mapSize; j++) {
                 JLabel label = new JLabel();
                 label.setPreferredSize(new Dimension(50, 50));
                 label.setHorizontalAlignment(JLabel.CENTER);
                 label.setVerticalAlignment(JLabel.CENTER);
 
-                // human icon
-                ImageIcon humanIcon = resizeIcon(new ImageIcon("human.png"), 50, 50);
-                ImageIcon wolfIcon = resizeIcon(new ImageIcon("wolf.png"), 50, 50);
-//            ImageIcon sheepIcon = resizeIcon(new ImageIcon("sheep.png"), 50, 50);
-
-                // if is Human
-                Organism organism = game.world.getOrganismAt(new Point(i, j));
+                Organism organism = game.world.getOrganismAt(new Point(j, i));
 
                 if (organism instanceof Human) {
                     label.setIcon(humanIcon);
                 } else if (organism instanceof Wolf) {
                     label.setIcon(wolfIcon);
-                } else {
-                    //label.setIcon(humanIcon);
                 }
-
-//            Random rand = new Random();
-//            int randomNum = rand.nextInt(3);
-//            if (randomNum == 0) {
-//                //label.setIcon(resizeIcon(new ImageIcon("wolf.png"), 50, 50));
-//                label.setIcon(icon);
-//            } else if (randomNum == 1) {
-//                //label.setIcon(resizeIcon(new ImageIcon("wolf.png"), 50, 50));
-//                label.setIcon(icon);
-//            } else {
-//                //label.setIcon(resizeIcon(new ImageIcon("wolf.png"), 50, 50));
-//                label.setIcon(icon);
-//            }
 
                 gamePanel.add(label);
             }
         }
 
         frame.add(gamePanel);
+    }
+
+    private void prepareGameFrame() {
         frame.pack();
         frame.revalidate();
         frame.repaint();
-
-        //game.runGame(size);
     }
 
     private ImageIcon resizeIcon(ImageIcon icon, int resizedWidth, int resizedHeight) {
         Image img = icon.getImage();
         Image resizedImage = img.getScaledInstance(resizedWidth, resizedHeight,  java.awt.Image.SCALE_SMOOTH);
         return new ImageIcon(resizedImage);
+    }
+
+    public void refreshFrame() {
+        frame.remove(gamePanel);
+
+        // create new game panel
+        gamePanel = new JPanel(new GridLayout(mapSize, mapSize));
+
+        // create new labels
+        JLabel[][] labels = new JLabel[mapSize][mapSize];
+
+        // fill labels with icons
+
+        for (int i = 0; i < mapSize; i++) {
+            for (int j = 0; j < mapSize; j++) {
+                labels[i][j] = new JLabel();
+                labels[i][j].setPreferredSize(new Dimension(50, 50));
+                labels[i][j].setHorizontalAlignment(JLabel.CENTER);
+                labels[i][j].setVerticalAlignment(JLabel.CENTER);
+
+                Organism organism = game.world.getOrganismAt(new Point(j, i));
+
+                if (organism instanceof Human) {
+                    labels[i][j].setIcon(humanIcon);
+                } else if (organism instanceof Wolf) {
+                    labels[i][j].setIcon(wolfIcon);
+                }
+
+                gamePanel.add(labels[i][j]);
+            }
+        }
+
+        // remove old game panel
+
+
+        // add new game panel
+        frame.add(gamePanel);
+
+        // refresh frame
+        frame.revalidate();
+        frame.repaint();
     }
 
     public int getMapSize() {
