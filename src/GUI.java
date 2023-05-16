@@ -169,14 +169,7 @@ public class GUI {
 
                 Organism organism = game.world.getOrganismAt(new Point(j, i));
 
-                if (organism instanceof Human) {
-                    label.setIcon(humanIcon);
-                } else if (organism instanceof Wolf) {
-                    label.setIcon(wolfIcon);
-                }
-                /*else if (organism instanceof Fox) {
-                    label.setIcon(foxIcon);
-                }*/
+                setLabelIcon(label, organism);
 
                 gamePanel.add(label);
             }
@@ -215,11 +208,7 @@ public class GUI {
 
                 Organism organism = game.world.getOrganismAt(new Point(j, i));
 
-                if (organism instanceof Human) {
-                    labels[i][j].setIcon(humanIcon);
-                } else if (organism instanceof Wolf) {
-                    labels[i][j].setIcon(wolfIcon);
-                }
+                setLabelIcon(labels[i][j], organism);
 
                 gamePanel.add(labels[i][j]);
             }
@@ -249,6 +238,16 @@ public class GUI {
         frame.setLayout(new BorderLayout());
         frame.add(gamePanel, BorderLayout.CENTER);
         frame.add(infoPanel, BorderLayout.EAST);
+    }
+
+    public void setLabelIcon(JLabel label, Organism organism) {
+        if (organism instanceof Human) {
+            label.setIcon(humanIcon);
+        } else if (organism instanceof Wolf) {
+            label.setIcon(wolfIcon);
+        } else if (organism instanceof Fox) {
+            label.setIcon(foxIcon);
+        }
     }
 
     public int getMapSize() {

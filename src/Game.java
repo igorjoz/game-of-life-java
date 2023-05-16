@@ -38,7 +38,7 @@ public class Game {
         createHuman();
 
         spawnWolves();
-        //spawnFoxes();
+        spawnFoxes();
     }
 
     public void createHuman() {
@@ -52,6 +52,13 @@ public class Game {
         for (int i = 0; i < Wolf.INITIAL_QUANTITY; i++) {
             Wolf wolf = new Wolf(world);
             world.spawnOrganism(wolf);
+        }
+    }
+
+    public void spawnFoxes() {
+        for (int i = 0; i < Fox.INITIAL_QUANTITY; i++) {
+            Fox fox = new Fox(world);
+            world.spawnOrganism(fox);
         }
     }
 
