@@ -21,10 +21,10 @@ public class GUI {
     private int fontSize = 20;
     private Font font = new Font(fontName, Font.PLAIN, fontSize);
 
-    ImageIcon humanIcon = resizeIcon(new ImageIcon("human.png"), 50, 50);
-    ImageIcon wolfIcon = resizeIcon(new ImageIcon("wolf.png"), 50, 50);
-    //ImageIcon sheepIcon = resizeIcon(new ImageIcon("sheep.png"), 50, 50);
-
+    ImageIcon humanIcon = resizeIcon(new ImageIcon("icons/human.png"), 50, 50);
+    ImageIcon specialAbilityIcon = resizeIcon(new ImageIcon("icons/specialAbility.png"), 50, 50);
+    ImageIcon wolfIcon = resizeIcon(new ImageIcon("icons/wolf.png"), 50, 50);
+    ImageIcon foxIcon = resizeIcon(new ImageIcon("icons/fox.png"), 50, 50);
 
     private int mapSize = 0;
 
@@ -98,8 +98,6 @@ public class GUI {
         createKeyPressEventListener();
         createInitialGamePanel();
         prepareGameFrame();
-
-        game.runGame();
     }
 
     private void createGameFrame() {
@@ -135,7 +133,7 @@ public class GUI {
                     game.movePlayer(Direction.DOWN);
                 }  else if (key == KeyEvent.VK_E) {
                     System.out.println("Special ability");
-                    //game.useSpecialAbility();
+                    game.activateSpecialAbility();
                 }  else if (key == KeyEvent.VK_S) {
                     System.out.println("Save game state");
                     //game.saveGameToFile();
@@ -175,6 +173,8 @@ public class GUI {
                     label.setIcon(humanIcon);
                 } else if (organism instanceof Wolf) {
                     label.setIcon(wolfIcon);
+                } else if (organism instanceof Fox) {
+                    label.setIcon(foxIcon);
                 }
 
                 gamePanel.add(label);
@@ -182,6 +182,8 @@ public class GUI {
         }
 
         frame.add(gamePanel);
+
+        createGameInfoPanel();
     }
 
     private void prepareGameFrame() {
@@ -197,15 +199,11 @@ public class GUI {
     }
 
     public void refreshFrame() {
-        frame.remove(gamePanel);
+        frame.getContentPane().removeAll();
 
-        // create new game panel
         gamePanel = new JPanel(new GridLayout(mapSize, mapSize));
 
-        // create new labels
         JLabel[][] labels = new JLabel[mapSize][mapSize];
-
-        // fill labels with icons
 
         for (int i = 0; i < mapSize; i++) {
             for (int j = 0; j < mapSize; j++) {
@@ -226,15 +224,30 @@ public class GUI {
             }
         }
 
-        // remove old game panel
+        createGameInfoPanel();
 
-
-        // add new game panel
-        frame.add(gamePanel);
-
-        // refresh frame
+        frame.pack();
         frame.revalidate();
         frame.repaint();
+    }
+
+    public void createGameInfoPanel() {
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBorder(BorderFactory.createTitledBorder("Info panel"));
+
+        JLabel turnLabel = new JLabel("Turn: " + String.valueOf(game.getTurn()));
+        infoPanel.add(turnLabel);
+
+        JLabel specialAbilityActiveLabel = new JLabel("Special ability cooldown: " + String.valueOf(game.getSpecialAbilityCooldown()));
+        infoPanel.add(specialAbilityActiveLabel);
+
+        JLabel specialAbilityLabel = new JLabel("Special ability duration: " + String.valueOf(game.getSpecialAbilityDuration()));
+        infoPanel.add(specialAbilityLabel);
+
+        frame.setLayout(new BorderLayout());
+        frame.add(gamePanel, BorderLayout.CENTER);
+        frame.add(infoPanel, BorderLayout.EAST);
     }
 
     public int getMapSize() {

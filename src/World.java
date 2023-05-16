@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import java.awt.Point;
 
@@ -8,21 +6,13 @@ public class World {
     private Organism[][] organisms;
     private List<Organism> organismsList = new ArrayList<>();
     private List<String> turnSummaryMessages = new ArrayList<>();
+    Game game;
     private Human human;
+    private int size;
 
-    //private Point playerPosition;
-    //private PlayerAction playerAction;
-
-
-
-    private boolean isPlayerAlive;
-
-    private static int size;
-
-    public World(int size) {
+    public World(Game game, int size) {
+        this.game = game;
         this.size = size;
-        this.isPlayerAlive = true;
-        //this.playerAction = PlayerAction.NONE;
 
         this.organisms = new Organism[size][size];
 
@@ -34,9 +24,15 @@ public class World {
     }
 
     public void takeTurn() {
+        if (!human.getIsAlive()) {
+            System.out.println("You died!");
+            System.exit(0);
+        }
+
         organismsList.sort(Comparator.comparing(Organism::getInitiative).thenComparing(Organism::getAge).reversed());
 
-        for (Organism organism : organismsList) {
+        List<Organism> organismsListCopy = new ArrayList<>(organismsList);
+        for (Organism organism : organismsListCopy) {
             organism.action();
         }
     }
@@ -62,14 +58,18 @@ public class World {
     }
 
     public void setOrganism(Organism organism, Point position) {
+        if (isOccupied(position) || !isWithinBoardBoundaries(position) || organism == null) {
+            return;
+        }
+
+        organism.setPosition(position);
         organismsList.add(organism);
-        organisms[position.x][position.y] = organism;
+        organisms[organism.getX()][organism.getY()] = organism;
     }
 
     public void createHuman(Human human) {
         Point position = human.getPosition();
 
-        //playerPosition = position;
         this.human = human;
         organismsList.add(human);
         organisms[position.x][position.y] = human;
@@ -83,14 +83,19 @@ public class World {
         organism.setPosition(destination);
     }
 
-    /*public void movePlayer(Point destination) {
-        organisms[destination.x][destination.y] = organisms[playerPosition.x][playerPosition.y];
-        organisms[playerPosition.x][playerPosition.y] = null;
-        playerPosition = destination;
-    }*/
-
     public void remove(Point position) {
-        // Implement remove logic here.
+        Iterator<Organism> iterator = organismsList.iterator();
+
+        while(iterator.hasNext()) {
+            Organism organism = iterator.next();
+            if(organism.getPosition().equals(position)) {
+                iterator.remove();
+            }
+        }
+
+        if (organisms[position.x][position.y] != null) {
+            organisms[position.x][position.y] = null;
+        }
     }
 
     public boolean isEmpty(Point position) {
@@ -102,24 +107,16 @@ public class World {
     }
 
     public boolean isWithinBoardBoundaries(Point position) {
-        return isWithinBoardBoundaries(position.x, position.y, size);
+        if (position == null) {
+            return false;
+        }
+
+        return isWithinBoardBoundaries(position.x, position.y);
     }
 
-    public static boolean isWithinBoardBoundaries(int x, int y, int size) {
+    public boolean isWithinBoardBoundaries(int x, int y) {
         return x >= 0 && x < size && y >= 0 && y < size;
     }
-
-    //public boolean hasFreeSpace(Point position) {
-        // Implement hasFreeSpace logic here.
-    //}
-
-    //public Point getRandomNeighbour(Point position) {
-        // Implement getRandomNeighbour logic here.
-    //}
-
-    //public Point getRandomFreeSpaceAround(Point position) {
-        // Implement getRandomFreeSpaceAround logic here.
-    //}
 
     public void addTurnSummaryMessage(String message) {
         turnSummaryMessages.add(message);
@@ -151,22 +148,17 @@ public class World {
 
     public Point getPlayerPosition() {
         return human.getPosition();
-        //return playerPosition;
     }
 
     public Human getHuman() {
         return human;
     }
 
-    /*public PlayerAction getPlayerAction() {
-        return playerAction;
-    }*/
-
     public boolean getIsPlayerAlive() {
-        return isPlayerAlive;
+        return human.getIsAlive();
     }
 
-    public static int getSize() {
+    public int getSize() {
         return size;
     }
 
@@ -179,8 +171,15 @@ public class World {
     }
 
     public boolean hasFreeSpace(Point position) {
-        if (isWithinBoardBoundaries(position.x - 1, position.y, size) && organisms[position.x - 1][position.y] == null) {
-            return true;
+        int[][] directions = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+
+        for (int[] direction : directions) {
+            int newX = position.x + direction[0];
+            int newY = position.y + direction[1];
+
+            if (isWithinBoardBoundaries(newX, newY) && organisms[newX][newY] == null) {
+                return true;
+            }
         }
 
         return false;
@@ -210,55 +209,36 @@ public class World {
         return new Point(x, y);
     }
 
-    public void setIsPlayerAlive(boolean isPlayerAlive) {
-        this.isPlayerAlive = isPlayerAlive;
-    }
-
-    /*public void setPlayerPosition(int x, int y) {
-        playerPosition = new Point(x, y);
-    }*/
-
     public Point getRandomFreeSpaceAround(Point position) {
-        int x = position.x;
-        int y = position.y;
+        ArrayList<Point> freeSpaces = new ArrayList<>();
 
-        int random = (int) (Math.random() * 4);
+        int[][] directions = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
 
-        switch (random) {
-            case 0:
-                x--;
-                break;
-            case 1:
-                x++;
-                break;
-            case 2:
-                y--;
-                break;
-            case 3:
-                y++;
-                break;
-        }
+        for (int[] direction : directions) {
+            int newX = position.x + direction[0];
+            int newY = position.y + direction[1];
 
-        return new Point(x, y);
-    }
-
-    public boolean canMoveTo(Point destination) {
-        // priint that canMoveTo check is being performed
-        System.out.println("canMoveTo check is being performed");
-
-        if (isWithinBoardBoundaries(destination)) {
-            System.out.println("isWithinBoardBoundaries");
-            if (isEmpty(destination)) {
-                System.out.println("isEmpty");
-                return true;
-            } else {
-                System.out.println("isOccupied");
-                System.out.println("Organism at destination: " + organisms[destination.x][destination.y].getClass().getSimpleName());
-                return false;
+            if (isWithinBoardBoundaries(newX, newY) && organisms[newX][newY] == null) {
+                freeSpaces.add(new Point(newX, newY));
             }
         }
 
+        if (freeSpaces.isEmpty()) {
+            return null;
+        }
+
+        Random random = new Random();
+        int randomNumber = random.nextInt(freeSpaces.size());
+
+        return freeSpaces.get(randomNumber);
+    }
+
+    public boolean canMoveTo(Point destination) {
         return isWithinBoardBoundaries(destination) && isEmpty(destination);
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
 

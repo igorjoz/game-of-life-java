@@ -2,18 +2,12 @@ import java.awt.*;
 
 public class Game {
     private GUI gui;
-    private int size;
-
-
     public World world;
-
-    private char playerInput;
+    private int size;
     private int turn;
-    private boolean isRunning;
 
     private int specialAbilityCooldown;
-    private boolean isSpecialAbilityActive;
-
+    private int specialAbilityDuration;
     private static final int SPECIAL_ABILITY_COOLDOWN = 5;
 
     public Game() {
@@ -26,24 +20,20 @@ public class Game {
     public void initializeGame() {
         this.size = gui.getMapSize();
 
-        this.world = new World(size);
-        this.playerInput = ' ';
-        this.isRunning = true;
+        this.world = new World(this, size);
         this.turn = 0;
-        this.specialAbilityCooldown = -1;
-        this.isSpecialAbilityActive = false;
+
+        this.specialAbilityCooldown = SPECIAL_ABILITY_COOLDOWN;
+        this.specialAbilityDuration = 0;
 
         spawnInitialOrganisms();
     }
 
-    public void runGame() {
-        System.out.println("Map size: " + size);
-        System.out.println("Game loop STARTED");
-    }
-
     public void spawnInitialOrganisms() {
         createHuman();
+
         spawnWolves();
+        //spawnFoxes();
     }
 
     public void createHuman() {
@@ -58,70 +48,73 @@ public class Game {
             Wolf wolf = new Wolf(world);
             world.spawnOrganism(wolf);
         }
-
-
-
-        /*for (int i = 0; i < 2; i++) {
-            Wolf wolf = new Wolf(new Point(1 + i, i), world);
-            world.spawnOrganism(wolf);
-        }*/
     }
 
     public void movePlayer(Direction direction) {
         Human human = world.getHuman();
-        Point currentPosition = world.getPlayerPosition();
-
-        Point destination = new Point(currentPosition.x, currentPosition.y);
 
         if (direction == Direction.UP) {
-            destination.y--;
             human.setPlayerAction(PlayerAction.MOVE_UP);
         } else if (direction == Direction.DOWN) {
-            destination.y++;
             human.setPlayerAction(PlayerAction.MOVE_DOWN);
         } else if (direction == Direction.LEFT) {
-            destination.x--;
             human.setPlayerAction(PlayerAction.MOVE_LEFT);
         } else if (direction == Direction.RIGHT) {
-            destination.x++;
             human.setPlayerAction(PlayerAction.MOVE_RIGHT);
         }
 
-        // print destination
-        System.out.println("Destination: " + destination.x + ", " + destination.y);
+        world.takeTurn();
+        turn++;
 
+        if (specialAbilityCooldown > 0) {
+            specialAbilityCooldown--;
+        }
 
-        if (world.canMoveTo(destination)) {
-            // print organisms array
-            System.out.println("Organisms array:");
-            for (int i = 0; i < world.getSize(); i++) {
-                for (int j = 0; j < world.getSize(); j++) {
-                    if (world.getOrganisms()[j][i] == null) {
-                        System.out.print("- ");
-                    } else {
-                        System.out.print(world.getOrganisms()[j][i].getSymbol() + " ");
-                    }
-                }
-                System.out.println();
+        if (specialAbilityDuration > 0) {
+            specialAbilityDuration--;
+
+            if (specialAbilityDuration == 0) {
+                specialAbilityCooldown = SPECIAL_ABILITY_COOLDOWN;
             }
+        }
 
-            // print that can move
-            System.out.println("Can move to destination");
-            //world.movePlayer(destination);
-
-            world.takeTurn();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (world.getOrganisms()[j][i] == null) {
+                    System.out.print("- ");
+                } else {
+                    System.out.print(world.getOrganisms()[j][i].getSymbol() + " ");
+                }
+            }
+            System.out.println();
         }
     }
 
-    public void runTurn() {
-        /*world.takeTurn();
-        turn++;
-        System.out.println("Turn: " + turn);*/
+    public void activateSpecialAbility() {
+        if (specialAbilityCooldown > 0) {
+            System.out.println("Special ability is on cooldown!");
+            return;
+        }
+
+        specialAbilityDuration = 5;
+        specialAbilityCooldown = 0;
     }
 
     public void quitGame() {
         System.out.println("Game loop ENDED");
         System.exit(0);
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public int getSpecialAbilityCooldown() {
+        return specialAbilityCooldown;
+    }
+
+    public int getSpecialAbilityDuration() {
+        return specialAbilityDuration;
     }
 
     public World getWorld() {
