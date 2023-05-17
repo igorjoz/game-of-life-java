@@ -48,6 +48,7 @@ public class Game {
         spawnDanedelions();
         spawnGuarana();
         spawnNightshades();
+        spawnHogweeds();
     }
 
     public void createHuman() {
@@ -117,6 +118,13 @@ public class Game {
         for (int i = 0; i < Nightshade.INITIAL_QUANTITY; i++) {
             Nightshade nightshade = new Nightshade(world);
             world.spawnOrganism(nightshade);
+        }
+    }
+
+    public void spawnHogweeds() {
+        for (int i = 0; i < Hogweed.INITIAL_QUANTITY; i++) {
+            Hogweed hogweed = new Hogweed(world);
+            world.spawnOrganism(hogweed);
         }
     }
 

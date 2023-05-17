@@ -269,9 +269,9 @@ public class GUI {
             label.setIcon(guaranaIcon);
         } else if (organism instanceof Nightshade) {
             label.setIcon(nightshadeIcon);
-        } /*else if (organism instanceof Hogweed) {
+        } else if (organism instanceof Hogweed) {
             label.setIcon(hogweedIcon);
-        }*/
+        }
     }
 
     public int getMapSize() {
