@@ -28,6 +28,10 @@ public class GUI {
     ImageIcon tortoiseIcon = resizeIcon(new ImageIcon("icons/tortoise.png"), 50, 50);
     ImageIcon antelopeIcon = resizeIcon(new ImageIcon("icons/antelope.png"), 50, 50);
     ImageIcon grassIcon = resizeIcon(new ImageIcon("icons/grass.png"), 50, 50);
+    ImageIcon dandelionIcon = resizeIcon(new ImageIcon("icons/dandelion.png"), 50, 50);
+    ImageIcon guaranaIcon = resizeIcon(new ImageIcon("icons/guarana.png"), 50, 50);
+    ImageIcon nightshadeIcon = resizeIcon(new ImageIcon("icons/nightshade.png"), 50, 50);
+    ImageIcon hogweedIcon = resizeIcon(new ImageIcon("icons/hogweed.png"), 50, 50);
 
     private int mapSize = 0;
 
@@ -256,7 +260,20 @@ public class GUI {
             label.setIcon(antelopeIcon);
         } else if (organism instanceof Grass) {
             label.setIcon(grassIcon);
+        } else if (organism instanceof Dandelion) {
+            label.setIcon(dandelionIcon);
         }
+        /*} else if (organism instanceof Guarana) {
+            label.setIcon(guaranaIcon);
+        } else if (organism instanceof SosnowskyHogweed) {
+            label.setIcon(sosnowskyHogweedIcon);
+        } else if (organism instanceof Sheep) {
+            label.setIcon(sheepIcon);
+        } else if (organism instanceof Toadstool) {
+            label.setIcon(toadstoolIcon);
+        } else {
+            label.setIcon(null);
+        }*/
     }
 
     public int getMapSize() {
