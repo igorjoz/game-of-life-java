@@ -26,6 +26,7 @@ public class GUI {
     ImageIcon wolfIcon = resizeIcon(new ImageIcon("icons/wolf.png"), 50, 50);
     ImageIcon foxIcon = resizeIcon(new ImageIcon("icons/fox.png"), 50, 50);
     ImageIcon tortoiseIcon = resizeIcon(new ImageIcon("icons/tortoise.png"), 50, 50);
+    ImageIcon antelopeIcon = resizeIcon(new ImageIcon("icons/antelope.png"), 50, 50);
 
     private int mapSize = 0;
 
@@ -250,6 +251,8 @@ public class GUI {
             label.setIcon(foxIcon);
         } else if (organism instanceof Tortoise) {
             label.setIcon(tortoiseIcon);
+        } else if (organism instanceof Antelope) {
+            label.setIcon(antelopeIcon);
         }
     }
 

@@ -41,6 +41,7 @@ public class Game {
         spawnFoxes();
 
         spawnTortoises();
+        spawnAntelopes();
     }
 
     public void createHuman() {
@@ -68,6 +69,13 @@ public class Game {
         for (int i = 0; i < Tortoise.INITIAL_QUANTITY; i++) {
             Tortoise tortoise = new Tortoise(world);
             world.spawnOrganism(tortoise);
+        }
+    }
+
+    public void spawnAntelopes() {
+        for (int i = 0; i < Antelope.INITIAL_QUANTITY; i++) {
+            Antelope antelope = new Antelope(world);
+            world.spawnOrganism(antelope);
         }
     }
 
