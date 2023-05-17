@@ -265,7 +265,7 @@ public class GUI {
             label.setIcon(grassIcon);
         } else if (organism instanceof Dandelion) {
             label.setIcon(dandelionIcon);
-        } } else if (organism instanceof Guarana) {
+        } else if (organism instanceof Guarana) {
             label.setIcon(guaranaIcon);
         } /*else if (organism instanceof SosnowskyHogweed) {
             label.setIcon(sosnowskyHogweedIcon);

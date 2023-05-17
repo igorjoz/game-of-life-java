@@ -46,6 +46,8 @@ public class Game {
 
         spawnGrass();
         spawnDanedelions();
+        spawnGuarana();
+        //spawnNightshades();
     }
 
     public void createHuman() {
@@ -101,6 +103,13 @@ public class Game {
         for (int i = 0; i < Dandelion.INITIAL_QUANTITY; i++) {
             Dandelion dandelion = new Dandelion(world);
             world.spawnOrganism(dandelion);
+        }
+    }
+
+    public void spawnGuarana() {
+        for (int i = 0; i < Guarana.INITIAL_QUANTITY; i++) {
+            Guarana guarana = new Guarana(world);
+            world.spawnOrganism(guarana);
         }
     }
 
