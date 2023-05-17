@@ -127,10 +127,6 @@ public class World {
         turnSummaryMessages.add(message);
     }
 
-    public void printTurnSummaryMessages() {
-        // Implement printTurnSummaryMessages logic here.
-    }
-
     public void addToOrganismsList(Organism organism) {
         organismsList.add(organism);
     }
@@ -145,16 +141,48 @@ public class World {
         }
     }
 
-    public void printOrganismsInfo() {
-        // Implement printOrganismsInfo logic here.
-    }
+    public void createNewOrganismBySpecies(Species species, Point position) {
+        Organism newOrganism;
+        switch(species) {
+            case HUMAN:
+                newOrganism = new Human(position, this);
+                break;
+            case WOLF:
+                newOrganism = new Wolf(position, this);
+                break;
+            case SHEEP:
+                newOrganism = new Sheep(position, this);
+                break;
+            case FOX:
+                newOrganism = new Fox(position, this);
+                break;
+            case TORTOISE:
+                newOrganism = new Tortoise(position, this);
+                break;
+            case ANTELOPE:
+                newOrganism = new Antelope(position, this);
+                break;
+            case GRASS:
+                newOrganism = new Grass(position, this);
+                break;
+            case DANDELION:
+                newOrganism = new Dandelion(position, this);
+                break;
+            case GUARANA:
+                newOrganism = new Guarana(position, this);
+                break;
+            case NIGHTSHADE:
+                newOrganism = new Nightshade(position, this);
+                break;
+            case HOGWEED:
+                newOrganism = new Hogweed(position, this);
+                break;
+            default:
+                newOrganism = null;
+                break;
+        }
 
-    public void printTurnSummary() {
-        // Implement printTurnSummary logic here.
-    }
-
-    public void printStatistics() {
-        // Implement printStatistics logic here.
+        setOrganism(newOrganism, position);
     }
 
     public Point getPlayerPosition() {
@@ -258,6 +286,14 @@ public class World {
 
     public void setHuman(Human human) {
         this.human = human;
+    }
+
+    public List<String> getTurnSummaryMessages() {
+        return turnSummaryMessages;
+    }
+
+    public void clearTurnSummaryMessages() {
+        turnSummaryMessages.clear();
     }
 }
 

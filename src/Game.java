@@ -142,6 +142,7 @@ public class Game {
         }
 
         world.takeTurn();
+        incrementOrganismsAge();
         turn++;
 
         if (specialAbilityCooldown > 0) {
@@ -165,6 +166,12 @@ public class Game {
                 }
             }
             System.out.println();
+        }
+    }
+
+    public void incrementOrganismsAge() {
+        for (Organism organism : world.getOrganismsList()) {
+            organism.setAge(organism.getAge() + 1);
         }
     }
 
@@ -238,7 +245,25 @@ public class Game {
                     world.setHuman((Human) organism);
                 } else if (species == Species.WOLF) {
                     organism = new Wolf(new Point(x, y), world);
-                } // Follow the same pattern for the rest of the species
+                } else if (species == Species.SHEEP) {
+                    organism = new Sheep(new Point(x, y), world);
+                } else if (species == Species.FOX) {
+                    organism = new Fox(new Point(x, y), world);
+                } else if (species == Species.TORTOISE) {
+                    organism = new Tortoise(new Point(x, y), world);
+                } else if (species == Species.ANTELOPE) {
+                    organism = new Antelope(new Point(x, y), world);
+                } else if (species == Species.GRASS) {
+                    organism = new Grass(new Point(x, y), world);
+                } else if (species == Species.DANDELION) {
+                    organism = new Dandelion(new Point(x, y), world);
+                } else if (species == Species.GUARANA) {
+                    organism = new Guarana(new Point(x, y), world);
+                } else if (species == Species.NIGHTSHADE) {
+                    organism = new Nightshade(new Point(x, y), world);
+                } else if (species == Species.HOGWEED) {
+                    organism = new Hogweed(new Point(x, y), world);
+                }
 
                 organism.setStrength(strength);
                 organism.setAge(age);
@@ -254,6 +279,7 @@ public class Game {
 
     public void quitGame() {
         System.out.println("Game loop ENDED");
+
         System.exit(0);
     }
 

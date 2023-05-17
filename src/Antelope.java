@@ -34,6 +34,10 @@ public class Antelope extends PreyAnimal {
         for (int i = 0; i < 2; i++) {
             Point destination = world.getRandomFreeSpaceAround(position);
 
+            if (destination == null) {
+                return;
+            }
+
             if (!destination.equals(position)) {
                 move(destination);
             }

@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 public class GUI {
@@ -282,6 +279,29 @@ public class GUI {
                 labels[i][j].setHorizontalAlignment(JLabel.CENTER);
                 labels[i][j].setVerticalAlignment(JLabel.CENTER);
 
+                /*JLabel label = new JLabel();
+                label.setPreferredSize(new Dimension(50, 50));
+                label.setHorizontalAlignment(JLabel.CENTER);
+                label.setVerticalAlignment(JLabel.CENTER);*/
+
+                int finalI = i;
+                int finalJ = j;
+                labels[i][j].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        if (e.isPopupTrigger()) {
+                            createContextMenu(finalI, finalJ).show(e.getComponent(), e.getX(), e.getY());
+                        }
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        if (e.isPopupTrigger()) {
+                            createContextMenu(finalI, finalJ).show(e.getComponent(), e.getX(), e.getY());
+                        }
+                    }
+                });
+
                 Organism organism = game.world.getOrganismAt(new Point(j, i));
 
                 setLabelIcon(labels[i][j], organism);
@@ -297,6 +317,26 @@ public class GUI {
         frame.repaint();
     }
 
+    private JPopupMenu createContextMenu(int x, int y) {
+        JPopupMenu contextMenu = new JPopupMenu();
+
+        for (Species species : Species.values()) {
+            JMenuItem menuItem = new JMenuItem(species.name());
+            menuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    game.world.createNewOrganismBySpecies(species, new Point(y, x));
+                    refreshFrame();
+                }
+            });
+
+            contextMenu.add(menuItem);
+        }
+
+
+        return contextMenu;
+    }
+
     public void createGameInfoPanel() {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
@@ -310,6 +350,19 @@ public class GUI {
 
         JLabel specialAbilityLabel = new JLabel("Special ability duration: " + String.valueOf(game.getSpecialAbilityDuration()));
         infoPanel.add(specialAbilityLabel);
+
+        String turnSummaryMessages = "";
+        for (String message : game.world.getTurnSummaryMessages()) {
+            turnSummaryMessages += message + "\n";
+        }
+
+        JTextArea textArea = new JTextArea(5, 20);
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        infoPanel.add(scrollPane);
+
+        textArea.setText(turnSummaryMessages);
+        game.world.clearTurnSummaryMessages();
 
         frame.setLayout(new BorderLayout());
         frame.add(gamePanel, BorderLayout.CENTER);

@@ -33,6 +33,7 @@ public class Guarana extends Plant {
             die();
             return true;
         }
+
         return false;
     }
 }
