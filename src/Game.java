@@ -39,6 +39,8 @@ public class Game {
 
         spawnWolves();
         spawnFoxes();
+
+        spawnTortoises();
     }
 
     public void createHuman() {
@@ -59,6 +61,13 @@ public class Game {
         for (int i = 0; i < Fox.INITIAL_QUANTITY; i++) {
             Fox fox = new Fox(world);
             world.spawnOrganism(fox);
+        }
+    }
+
+    public void spawnTortoises() {
+        for (int i = 0; i < Tortoise.INITIAL_QUANTITY; i++) {
+            Tortoise tortoise = new Tortoise(world);
+            world.spawnOrganism(tortoise);
         }
     }
 
