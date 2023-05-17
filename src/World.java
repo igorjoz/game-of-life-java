@@ -104,6 +104,10 @@ public class World {
     }
 
     public boolean isOccupied(Point position) {
+        if (position == null) {
+            return false;
+        }
+
         return organisms[position.x][position.y] != null;
     }
 

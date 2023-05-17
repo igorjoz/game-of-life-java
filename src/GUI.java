@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
 public class GUI {
     private static final int TILE_SIZE = 50;
@@ -183,10 +184,77 @@ public class GUI {
             }
         }
 
+
+
         frame.add(gamePanel);
 
         createGameInfoPanel();
     }
+
+
+
+
+
+    /*private void createInitialGamePanel() {
+        gamePanel = new JPanel();
+        gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
+        gamePanel.setBorder(new EmptyBorder(new Insets(20, 20, 20, 20)));
+
+        for (int i = 0; i < mapSize; i++) {
+            JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+
+            for (int j = 0; j < mapSize; j++) {
+                if ((i % 2 != 0) && (j == mapSize - 1)) {
+                    continue; // Skip the last label in every odd row
+                }
+
+                JLabel label = createHexagonLabel();
+                Organism organism = game.world.getOrganismAt(new Point(j, i));
+                setLabelIcon(label, organism);
+
+                rowPanel.add(label);
+            }
+
+            gamePanel.add(rowPanel);
+        }
+
+        frame.add(gamePanel);
+
+        createGameInfoPanel();
+    }
+
+    private JLabel createHexagonLabel() {
+        int size = 50; // Size of the hexagon
+        Polygon hexagon = new Polygon();
+        for (int i = 0; i < 6; i++) {
+            hexagon.addPoint((int) (size / 2 + size * Math.cos(i * Math.PI / 3)),
+                    (int) (size / 2 + size * Math.sin(i * Math.PI / 3)));
+        }
+
+        Icon icon = new ImageIcon(createHexagonImage(hexagon, size));
+        JLabel label = new JLabel(icon);
+        label.setPreferredSize(new Dimension(size, size));
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+
+        return label;
+    }
+
+    private Image createHexagonImage(Polygon hexagon, int size) {
+        BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = image.createGraphics();
+        g2.setColor(Color.WHITE);
+        g2.fill(hexagon);
+        g2.setColor(Color.BLACK);
+        g2.draw(hexagon);
+        g2.dispose();
+        return image;
+    }*/
+
+
+
+
+
 
     private void prepareGameFrame() {
         frame.pack();
