@@ -25,6 +25,7 @@ public class GUI {
     ImageIcon specialAbilityIcon = resizeIcon(new ImageIcon("icons/specialAbility.png"), 50, 50);
     ImageIcon wolfIcon = resizeIcon(new ImageIcon("icons/wolf.png"), 50, 50);
     ImageIcon foxIcon = resizeIcon(new ImageIcon("icons/fox.png"), 50, 50);
+    ImageIcon sheepIcon = resizeIcon(new ImageIcon("icons/sheep.png"), 50, 50);
     ImageIcon tortoiseIcon = resizeIcon(new ImageIcon("icons/tortoise.png"), 50, 50);
     ImageIcon antelopeIcon = resizeIcon(new ImageIcon("icons/antelope.png"), 50, 50);
     ImageIcon grassIcon = resizeIcon(new ImageIcon("icons/grass.png"), 50, 50);
@@ -48,7 +49,7 @@ public class GUI {
     }
 
     private void createStartGameFrame() {
-        frame = new JFrame("Game of Life");
+        frame = new JFrame("Game of Life - Igor Józefowicz 193257");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 200);
         frame.setLocationRelativeTo(null);
@@ -110,7 +111,7 @@ public class GUI {
     private void createGameFrame() {
         frame.dispose();
 
-        frame = new JFrame("Game of Life");
+        frame = new JFrame("Game of Life - Igor Józefowicz 193257");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(mapSize * TILE_SIZE, mapSize * TILE_SIZE);
         frame.setLocationRelativeTo(null);
@@ -254,7 +255,9 @@ public class GUI {
             label.setIcon(wolfIcon);
         } else if (organism instanceof Fox) {
             label.setIcon(foxIcon);
-        } else if (organism instanceof Tortoise) {
+        } else if (organism instanceof Sheep) {
+            label.setIcon(sheepIcon);
+        }  else if (organism instanceof Tortoise) {
             label.setIcon(tortoiseIcon);
         } else if (organism instanceof Antelope) {
             label.setIcon(antelopeIcon);
@@ -262,15 +265,14 @@ public class GUI {
             label.setIcon(grassIcon);
         } else if (organism instanceof Dandelion) {
             label.setIcon(dandelionIcon);
-        }
-        /*} else if (organism instanceof Guarana) {
+        } } else if (organism instanceof Guarana) {
             label.setIcon(guaranaIcon);
-        } else if (organism instanceof SosnowskyHogweed) {
+        } /*else if (organism instanceof SosnowskyHogweed) {
             label.setIcon(sosnowskyHogweedIcon);
-        } else if (organism instanceof Sheep) {
-            label.setIcon(sheepIcon);
-        } else if (organism instanceof Toadstool) {
-            label.setIcon(toadstoolIcon);
+        } else if (organism instanceof Nightshade) {
+            label.setIcon(nightshadeIcon);
+        } else if (organism instanceof Hogweed) {
+            label.setIcon(hogweedIcon);
         } else {
             label.setIcon(null);
         }*/

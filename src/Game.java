@@ -40,10 +40,12 @@ public class Game {
         spawnWolves();
         spawnFoxes();
 
+        spawnSheep();
         spawnTortoises();
         spawnAntelopes();
 
         spawnGrass();
+        spawnDanedelions();
     }
 
     public void createHuman() {
@@ -67,6 +69,13 @@ public class Game {
         }
     }
 
+    public void spawnSheep() {
+        for (int i = 0; i < Sheep.INITIAL_QUANTITY; i++) {
+            Sheep sheep = new Sheep(world);
+            world.spawnOrganism(sheep);
+        }
+    }
+
     public void spawnTortoises() {
         for (int i = 0; i < Tortoise.INITIAL_QUANTITY; i++) {
             Tortoise tortoise = new Tortoise(world);
@@ -85,6 +94,13 @@ public class Game {
         for (int i = 0; i < Grass.INITIAL_QUANTITY; i++) {
             Grass grass = new Grass(world);
             world.spawnOrganism(grass);
+        }
+    }
+
+    public void spawnDanedelions() {
+        for (int i = 0; i < Dandelion.INITIAL_QUANTITY; i++) {
+            Dandelion dandelion = new Dandelion(world);
+            world.spawnOrganism(dandelion);
         }
     }
 
