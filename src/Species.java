@@ -10,7 +10,8 @@ public enum Species {
     DANDELION(9),
     NIGHTSHADE(10),
     HOGWEED(11),
-    ORGANISM(12);
+    ORGANISM(12),
+    PLANT(13);
     private int value;
 
     private Species(int value) {
