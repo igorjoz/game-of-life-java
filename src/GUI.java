@@ -267,14 +267,10 @@ public class GUI {
             label.setIcon(dandelionIcon);
         } else if (organism instanceof Guarana) {
             label.setIcon(guaranaIcon);
-        } /*else if (organism instanceof SosnowskyHogweed) {
-            label.setIcon(sosnowskyHogweedIcon);
         } else if (organism instanceof Nightshade) {
             label.setIcon(nightshadeIcon);
-        } else if (organism instanceof Hogweed) {
+        } /*else if (organism instanceof Hogweed) {
             label.setIcon(hogweedIcon);
-        } else {
-            label.setIcon(null);
         }*/
     }
 
