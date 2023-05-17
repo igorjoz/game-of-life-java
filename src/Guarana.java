@@ -28,9 +28,12 @@ public class Guarana extends Plant {
     public boolean collision(Organism other) {
         if (canBeKilledBy(other)) {
             other.setStrength(other.getStrength() + 3);
+
             String message = "Organism " + other.getSymbol() + " ate guarana at (" + position.getX() + ", " + position.getY() + ")";
             world.addTurnSummaryMessage(message);
+
             die();
+
             return true;
         }
 

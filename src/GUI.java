@@ -321,6 +321,10 @@ public class GUI {
         JPopupMenu contextMenu = new JPopupMenu();
 
         for (Species species : Species.values()) {
+            if (species == Species.HUMAN || species == Species.ORGANISM || species == Species.PLANT) {
+                continue;
+            }
+
             JMenuItem menuItem = new JMenuItem(species.name());
             menuItem.addActionListener(new ActionListener() {
                 @Override
