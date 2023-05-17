@@ -32,7 +32,7 @@ public class GUI {
     ImageIcon dandelionIcon = resizeIcon(new ImageIcon("icons/dandelion.png"), 50, 50);
     ImageIcon guaranaIcon = resizeIcon(new ImageIcon("icons/guarana.png"), 50, 50);
     ImageIcon nightshadeIcon = resizeIcon(new ImageIcon("icons/nightshade.png"), 50, 50);
-    ImageIcon hogweedIcon = resizeIcon(new ImageIcon("icons/hogweed.png"), 50, 50);
+    ImageIcon hogweedIcon = resizeIcon(new ImageIcon("icons/hogweed.jpg"), 50, 50);
 
     private int mapSize = 0;
 
